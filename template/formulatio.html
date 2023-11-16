@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Conexión a la Base de Datos</title>
+    <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+    
+    form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+    }
+    
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+    
+    label {
+        display: block;
+        margin: 10px 0 5px;
+        color: #555;
+    }
+    
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+    
+    select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+    
+    input[type="submit"] {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }</style>
+</head>
+<body>
+    <form method="post" id="db_form">
+        <h1>Seleccione la base de datos e ingrese sus credenciales</h1>
+        <label for="db_type">Seleccione la base de datos:</label>
+        <select name="db_type" id="db_type" required>
+            <option value="mysql">MySQL</option>
+            <option value="mongodb">MongoDB</option>
+            <option value="postgres">PostgreSQL</option>
+        </select>
+
+        <div id="mysql_fields" style="display: none;">
+            <label for="mysql_server">Servidor MySQL:</label>
+            <input type="text" id="mysql_server" name="mysql_server">
+
+            <label for="mysql_username">Nombre de usuario MySQL:</label>
+            <input type="text" id="mysql_username" name="mysql_username">
+
+            <label for="mysql_password">Contraseña MySQL:</label>
+            <input type="password" id="mysql_password" name="mysql_password">
+
+            <label for="mysql_database">Nombre de la base de datos MySQL:</label>
+            <input type="text" id="mysql_database" name="mysql_database">
+        </div>
+
+        <div id="mongodb_fields" style="display: none;">
+            <label for="mongodb_server">Servidor MongoDB:</label>
+            <input type="text" id="mongodb_server" name="mongodb_server">
+
+            <label for="mongodb_database">Nombre de la base de datos MongoDB:</label>
+            <input type="text" id="mongodb_database" name="mongodb_database">
+        </div>
+
+        <div id="postgres_fields" style="display: none;">
+            <label for="postgres_server">Servidor PostgreSQL:</label>
+            <input type="text" id="postgres_server" name="postgres_server">
+
+            <label for="postgres_username">Nombre de usuario PostgreSQL:</label>
+            <input type="text" id="postgres_username" name="postgres_username">
+
+            <label for="postgres_password">Contraseña PostgreSQL:</label>
+            <input type="password" id="postgres_password" name="postgres_password">
+
+            <label for="postgres_database">Nombre de la base de datos PostgreSQL:</label>
+            <input type="text" id="postgres_database" name="postgres_database">
+        </div>
+
+        <input type="submit" value="Conectar">
+    </form>
+
+    <script>
+        const dbForm = document.getElementById('db_form');
+        const dbType = document.getElementById('db_type');
+        const mysqlFields = document.getElementById('mysql_fields');
+        const mongodbFields = document.getElementById('mongodb_fields');
+        const postgresFields = document.getElementById('postgres_fields');
+
+        function toggleFields() {
+            mysqlFields.style.display = 'none';
+            mongodbFields.style.display = 'none';
+            postgresFields.style.display = 'none';
+
+            const selectedOption = dbType.value;
+            if (selectedOption === 'mysql') {
+                dbForm.action = "/conectar_mysql";
+                mysqlFields.style.display = 'block';
+            } else if (selectedOption === 'mongodb') {
+                dbForm.action = "/conectar_mongodb";
+                mongodbFields.style.display = 'block';
+            } else if (selectedOption === 'postgres') {
+                dbForm.action = "/conectar_postgres";
+                postgresFields.style.display = 'block';
+            }
+        }
+
+        dbType.addEventListener('change', toggleFields);
+        toggleFields();
+    </script>
+</body>
+</html>
