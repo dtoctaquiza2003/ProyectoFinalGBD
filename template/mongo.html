@@ -6,7 +6,7 @@
     <title>Colecciones de MongoDB</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
@@ -25,7 +25,7 @@
         }
 
         h1 {
-            color: #333;
+            color: #0066cc;
         }
 
         ul {
@@ -39,7 +39,7 @@
             margin: 5px;
             border-radius: 4px;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-            display: inline-block;
+            color: #333;
         }
     </style>
 </head>
@@ -47,8 +47,15 @@
     <main>
         <h1>Colecciones en la base de datos MongoDB</h1>
         <ul>
-            {% for coleccion in colecciones %}
-                <li>{{ coleccion }}</li>
+            {% for base_de_datos, colecciones in colecciones_por_base.items() %}
+                <li>
+                    <strong>{{ base_de_datos }}</strong>
+                    <ul>
+                        {% for coleccion in colecciones %}
+                            <li>{{ coleccion }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
             {% endfor %}
         </ul>
     </main>
