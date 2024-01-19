@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import psycopg2
 from psycopg2 import extras, sql
 from bson import json_util
-
+//hola mendoza
 app = Flask(_name_)
 app.secret_key = 'david2003'
 
