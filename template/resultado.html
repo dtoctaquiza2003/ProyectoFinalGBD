@@ -150,12 +150,121 @@
             overflow: auto;
             /* Habilita el desplazamiento */
         }
+
+        .head {
+            display: flex;
+            align-items: center;
+        }
+
+        .titulo {
+            flex-grow: 1;
+            text-align: center;
+            margin-right: 10px;
+            /* Ajusta el margen entre el título y el botón según tus necesidades */
+        }
+
+        #nuevaConexion {
+            text-align: left;
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <h1>Gestor de Bases de Datos</h1>
+        <div class="head">
+            <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#crearUsuarioModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-person-add" viewBox="0 0 16 16">
+                    <path
+                        d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+                    <path
+                        d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
+                </svg> Nuevo Usuario
+            </button>
+
+            <h1 class="titulo">Gestor de Bases de Datos</h1>
+            <button id="nuevaConexion" class="btn btn-primary mt-3" data-toggle="modal"
+                data-target="#nuevaConexionModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-node-plus" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M11 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8M6.025 7.5a5 5 0 1 1 0 1H4A1.5 1.5 0 0 1 2.5 10h-1A1.5 1.5 0 0 1 0 8.5v-1A1.5 1.5 0 0 1 1.5 6h1A1.5 1.5 0 0 1 4 7.5zM11 5a.5.5 0 0 1 .5.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2A.5.5 0 0 1 11 5M1.5 7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z" />
+                </svg> Añadir Conexion
+            </button>
+        </div>
+
+        <!-- Modal Nueva Conexión -->
+        <div class="modal fade" id="nuevaConexionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Nueva Conexión</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" id="db_form">
+                            <div class="form-group">
+                                <label for="db_type">Seleccione la base de datos:</label>
+                                <select class="form-control" name="db_type" id="db_type" required>
+                                    <option value="mysql">MySQL</option>
+                                    <option value="mongodb">MongoDB</option>
+                                    <option value="postgres">PostgreSQL</option>
+                                </select>
+                            </div>
+
+                            <div id="mysql_fields" style="display: none;">
+                                <div class="form-group">
+                                    <label for="mysql_server">Servidor MySQL:</label>
+                                    <input type="text" class="form-control" id="mysql_server" name="mysql_server">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="mysql_username">Nombre de usuario MySQL:</label>
+                                    <input type="text" class="form-control" id="mysql_username" name="mysql_username">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="mysql_password">Contraseña MySQL:</label>
+                                    <input type="password" class="form-control" id="mysql_password"
+                                        name="mysql_password">
+                                </div>
+                            </div>
+
+                            <div id="mongodb_fields" style="display: none;">
+                                <div class="form-group">
+                                    <label for="mongodb_server">Servidor MongoDB:</label>
+                                    <input type="text" class="form-control" id="mongodb_server" name="mongodb_server">
+                                </div>
+                            </div>
+
+                            <div id="postgres_fields" style="display: none;">
+                                <div class="form-group">
+                                    <label for="postgres_server">Servidor PostgreSQL:</label>
+                                    <input type="text" class="form-control" id="postgres_server" name="postgres_server">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="postgres_username">Nombre de usuario PostgreSQL:</label>
+                                    <input type="text" class="form-control" id="postgres_username"
+                                        name="postgres_username">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="postgres_password">Contraseña PostgreSQL:</label>
+                                    <input type="password" class="form-control" id="postgres_password"
+                                        name="postgres_password">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">Conectar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
     <main>
@@ -174,11 +283,15 @@
                 </ul>
             </div>
             {% endfor %}
+
         </div>
 
         <div class="consulta-resultados">
             <div class="consulta-box">
                 <h1>Consulta a la Base de Datos</h1>
+                <label id="opTrigger">
+                    <input type="checkbox" id="trigger"> Trigger&nbsp;&nbsp;
+                </label>
                 <select name="nombre_bd" id="nombre_bd">
                     {% for base, tablas in bases_y_tablas.items() %}
                     <option value="{{ base }}">{{ base }}</option>
@@ -187,9 +300,93 @@
                 <textarea id="consulta_sql" name="consulta_sql" rows="6" class="form-control"
                     placeholder="Ingrese su consulta SQL aquí"></textarea>
                 <button class="btn btn-primary mt-3" onclick="enviarConsulta()">Enviar Consulta</button>
-            </div>
 
-            <div class="resultados-box">
+<!-- Fragmentacion -->
+<button class="btn btn-success mt-3" onclick="abrirAmbosModales()">Generar Fragmentacion</button>
+
+<!-- Modal de la derecha -->
+<div class="modal fade" id="generarReplicacionModalDerecha" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelDerecha"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabelDerecha">Datos de la conexion de salida</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Campos para ingresar información en el modal de la derecha -->
+                 <div class="form-group">
+                    <label for="tipoBaseDatosDerecha">Tipo de Base de Datos:</label>
+                    <select class="form-control" id="tipoBaseDatosDerecha">
+                        <option value="mysql">MySQL</option>
+                        <option value="postgres">PostgreSQL</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="servidorDerecha">Servidor:</label>
+                    <input type="text" class="form-control" id="servidorDerecha" placeholder="Ingrese el servidor">
+                </div>
+                <div class="form-group">
+                    <label for="usuarioDerecha">Usuario:</label>
+                    <input type="text" class="form-control" id="usuarioDerecha" placeholder="Ingrese el usuario">
+                </div>
+                <div class="form-group">
+                    <label for="contrasenaDerecha">Contraseña:</label>
+                    <input type="password" class="form-control" id="contrasenaDerecha" placeholder="Ingrese la contraseña">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!-- Botones de acción -->
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <!-- Botón de guardar -->
+                <button type="button" class="btn btn-success" onclick="guardarConfiguracion('derecha')">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de la izquierda -->
+<div class="modal fade" id="generarReplicacionModalIzquierda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelIzquierda"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabelIzquierda">Datos de la conexión de origen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Campos para ingresar información en el modal de la izquierda -->
+                <div class="form-group">
+                    <label for="servidorIzquierda">Servidor:</label>
+                    <input type="text" class="form-control" id="servidorIzquierda" placeholder="Ingrese el servidor">
+                </div>
+                <div class="form-group">
+                    <label for="usuarioIzquierda">Usuario:</label>
+                    <input type="text" class="form-control" id="usuarioIzquierda" placeholder="Ingrese el usuario">
+                </div>
+                <div class="form-group">
+                    <label for="contrasenaIzquierda">Contraseña:</label>
+                    <input type="password" class="form-control" id="contrasenaIzquierda" placeholder="Ingrese la contraseña">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!-- Botones de acción -->
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <!-- Botón de guardar -->
+                <button type="button" class="btn btn-success" onclick="guardarConfiguracion('izquierda')">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  -->
+
+            </div>
+                <div class="resultados-box">
                 <h1>Resultados de la Consulta</h1>
                 <div class="resultados" id="resultados">
 
@@ -198,10 +395,128 @@
         </div>
     </main>
 
+
+    <div class="modal fade" id="crearUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Crear Nuevo Usuario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Campos para la creación de usuarios -->
+                    <label for="nuevo_usuario">Nombre de Usuario:</label>
+                    <input type="text" id="nuevo_usuario" class="form-control">
+                    <br>
+
+                    <label for="nueva_contraseña">Contraseña de Usuario:</label>
+                    <input type="password" id="nueva_contraseña" class="form-control">
+                    <br>
+
+                    <label for="ip_usuario" name="label_ip">Servidor:</label>
+                    <input type="text" name="input_ip" id="ip_usuario" class="form-control">
+                    <br>
+
+                    <label for="permisos">Permisos del usuario:</label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="administrador" id="administrador"> Administrador
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="seleccion" id="seleccion"> Selección
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="insercion" id="insercion"> Inserción
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="actualizacion" id="actualizacion"> Actualización
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="eliminacion" id="eliminacion"> Eliminación
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <!-- Botones de acción -->
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="crearNuevoUsuario()">Crear Usuario</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script>
+
+        //fragmentacion
+        function abrirAmbosModales() {
+        
+            $.ajax({
+            url: '/obtener_datos_sesion_actual',  // Ruta que maneja la obtención de datos de sesión
+            type: 'GET',
+            success: function(data) {
+                // Llena los campos del modal izquierdo con los datos de la sesión actual
+                $('#servidorIzquierda').val(data.servidor);
+                $('#usuarioIzquierda').val(data.usuario);
+                // Puedes decidir si quieres llenar la contraseña o dejar el campo en blanco por motivos de seguridad
+                // $('#contrasenaIzquierda').val(data.contrasena);
+
+                // Abre el modal de la izquierda
+                $('#generarReplicacionModalIzquierda').modal('show');
+            },
+            error: function(error) {
+                console.error('Error al obtener datos de sesión:', error);
+            }
+        });
+
+
+        // Escucha el evento cuando se cierra el modal de la izquierda
+        $('#generarReplicacionModalIzquierda').on('hidden.bs.modal', function (e) {
+            // Abre el modal de la derecha cuando se cierra el modal de la izquierda
+            $('#generarReplicacionModalDerecha').modal('show');
+
+            // Desvincula el evento para evitar que se vuelva a abrir el modal de la derecha
+            $('#generarReplicacionModalIzquierda').off('hidden.bs.modal');
+        });
+    }
+    
+  
+
+        /* Carga formulario de nueva conexion */
+        const dbForm = document.getElementById('db_form');
+        const dbType = document.getElementById('db_type');
+        const mysqlFields = document.getElementById('mysql_fields');
+        const mongodbFields = document.getElementById('mongodb_fields');
+        const postgresFields = document.getElementById('postgres_fields');
+
+        function toggleFields() {
+            mysqlFields.style.display = 'none';
+            mongodbFields.style.display = 'none';
+            postgresFields.style.display = 'none';
+
+            const selectedOption = dbType.value;
+            if (selectedOption === 'mysql') {
+                dbForm.action = "/conectar_mysql";
+                mysqlFields.style.display = 'block';
+            } else if (selectedOption === 'mongodb') {
+                dbForm.action = "/conectar_mongodb";
+                mongodbFields.style.display = 'block';
+            } else if (selectedOption === 'postgres') {
+                dbForm.action = "/conectar_postgres";
+                postgresFields.style.display = 'block';
+            }
+        }
+
+        dbType.addEventListener('change', toggleFields);
+        toggleFields();
+
         $(document).ready(function () {
             // Agregar evento de clic a las bases de datos para mostrar/ocultar las listas de tablas
             $('.base-datos').click(function () {
@@ -210,6 +525,17 @@
 
             if (window.location.href.includes("conectar_mysql")) {
                 $('#nombre_bd').hide();
+                $('#trigger').change(function () {
+                    // Obtiene el estado del checkbox de Administrador
+                    var isChecked = $(this).prop('checked');
+
+                    // Muestra u oculta el combo dependiendo del estado del checkbox
+                    $('#nombre_bd').toggle(isChecked);
+                });
+            }
+
+            if (!window.location.href.includes("conectar_mysql")) {
+                $('#opTrigger').hide();
             }
         });
 
@@ -218,20 +544,44 @@
             var consultaSQL = $('#consulta_sql').val();
             // Condicion para mandar el POST dependiendo de la BD
             if (window.location.href.includes("conectar_mysql")) {
-                // Enviar la consulta al servidor mediante AJAX
-                $.ajax({
-                    type: 'POST',
-                    url: '/consultar_mysql',  // Ruta en tu servidor Flask para procesar la consulta
-                    data: { consulta_sql: consultaSQL },
-                    success: function (response) {
-                        // Manejar la respuesta del servidor y mostrar los resultados
-                        mostrarResultados(response);
-                    },
-                    error: function (error) {
-                        // Manejar errores de la solicitud AJAX
-                        alert('Error al enviar la consulta: ' + error.statusText);
+                var isChecked = $('#trigger').prop('checked');
+                if (consultaSQL.toUpperCase().includes('CREATE TRIGGER') || consultaSQL.toUpperCase().includes('SHOW TRIGGERS')) {
+                    if (isChecked) {
+                        // Enviar la consulta al servidor mediante AJAX
+                        $.ajax({
+                            type: 'POST',
+                            url: '/crear_trigger_mysql',  // Ruta en tu servidor Flask para procesar la consulta
+                            data: { consulta_sql: consultaSQL,
+                            base: $('#nombre_bd').val() },
+                            success: function (response) {
+                                // Manejar la respuesta del servidor y mostrar los resultados
+                                mostrarResultados(response);
+                            },
+                            error: function (error) {
+                                // Manejar errores de la solicitud AJAX
+                                alert('Error al enviar la consulta: ' + error.statusText);
+                            }
+                        });
+                    }else{
+                        alert('Para poder crear un trigger debe seleccionar el checkbox')
                     }
-                });
+                } else {
+                    // Enviar la consulta al servidor mediante AJAX
+                    $.ajax({
+                        type: 'POST',
+                        url: '/consultar_mysql',  // Ruta en tu servidor Flask para procesar la consulta
+                        data: { consulta_sql: consultaSQL },
+                        success: function (response) {
+                            // Manejar la respuesta del servidor y mostrar los resultados
+                            mostrarResultados(response);
+                        },
+                        error: function (error) {
+                            // Manejar errores de la solicitud AJAX
+                            alert('Error al enviar la consulta: ' + error.statusText);
+                        }
+                    });
+                }
+
             } else if (window.location.href.includes("conectar_postgres")) {
                 $.ajax({
                     type: 'POST',
@@ -329,7 +679,111 @@
             }
         }
 
+        function enviarConsulta2(consultaSQL) {
+            // Condición para mandar el POST dependiendo de la BD
+            if (window.location.href.includes("conectar_mysql")) {
+                // Enviar la consulta al servidor mediante AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: '/consultar_mysql',  // Ruta en tu servidor Flask para procesar la consulta
+                    data: { consulta_sql: consultaSQL },
+                    success: function (response) {
+                        // Manejar la respuesta del servidor y mostrar los resultados
+                        mostrarResultados(response);
+                    },
+                    error: function (error) {
+                        // Manejar errores de la solicitud AJAX
+                        alert('Error al enviar la consulta: ' + error.statusText);
+                    }
+                });
+            } else if (window.location.href.includes("conectar_postgres")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/consultar_postgres',  // Ruta en tu servidor Flask para procesar la consulta
+                    data: {
+                        consulta_sql: consultaSQL
+                        //    base: $('#nombre_bd').val()
+                    },
+                    success: function (response) {
+                        // Manejar la respuesta del servidor y mostrar los resultados
+                    },
+                    error: function (error) {
+                        // Manejar errores de la solicitud AJAX
+                        alert('Error al enviar la consulta: ' + error.statusText);
+                    }
+                });
+            }
+        }
 
+        function crearNuevoUsuario() {
+            var nuevoUsuario = $('#nuevo_usuario').val();
+            var nuevaContraseña = $('#nueva_contraseña').val();
+            var nuevoServidor = $('#ip_usuario').val();
+
+            var isAdmin = $('#administrador').prop('checked');
+            var isSelect = $('#seleccion').prop('checked');
+            var isInsert = $('#insercion').prop('checked');
+            var isUpdate = $('#actualizacion').prop('checked');
+            var isDelete = $('#eliminacion').prop('checked');
+
+            var currentUrl = window.location.href;
+
+            var consultaCrearUsuario;
+
+            if (currentUrl.includes("conectar_mysql")) {
+                consultaCrearUsuario = "CREATE USER '" + nuevoUsuario + "'@'" + nuevoServidor + "' IDENTIFIED BY '" + nuevaContraseña + "'";
+                enviarConsulta2(consultaCrearUsuario);
+
+                if (isAdmin) {
+                    enviarConsulta2("GRANT ALL PRIVILEGES ON *.* TO '" + nuevoUsuario + "'@'" + nuevoServidor + "' WITH GRANT OPTION;");
+                } else {
+                    var permisos = [];
+                    if (isSelect) permisos.push("SELECT");
+                    if (isInsert) permisos.push("INSERT");
+                    if (isUpdate) permisos.push("UPDATE");
+                    if (isDelete) permisos.push("DELETE");
+
+                    if (permisos.length > 0) {
+                        var permisosQuery = permisos.join(", ");
+                        enviarConsulta2("GRANT " + permisosQuery + " ON *.* TO '" + nuevoUsuario + "'@'" + nuevoServidor + "';");
+                    }
+                }
+
+                enviarConsulta2("FLUSH PRIVILEGES;");
+            } else if (currentUrl.includes("conectar_postgres")) {
+                consultaCrearUsuario = "CREATE USER " + nuevoUsuario + " WITH PASSWORD '" + nuevaContraseña + "';";
+                $.ajax({
+                    type: 'POST',
+                    url: '/crearUsuarioPostgres',  // Ruta en tu servidor Flask para procesar la consulta
+                    data: {
+                        consulta_sql: consultaCrearUsuario
+                        //    base: $('#nombre_bd').val()
+                    },
+                    success: function (response) {
+                        // Manejar la respuesta del servidor y mostrar los resultados
+                        print(response);
+                    },
+                    error: function (error) {
+                        // Manejar errores de la solicitud AJAX
+                        alert('Error al enviar la consulta: ' + error.statusText);
+                    }
+                });
+                // Lógica para asignar permisos en PostgreSQL si es necesario
+                // Puedes agregar tu lógica aquí según tus necesidades para PostgreSQL
+            }
+
+            $('#crearUsuarioModal').modal('hide');
+        }
+
+
+        // Agrega un event listener para el evento 'change' del checkbox Administrador
+        $('#administrador').change(function () {
+            // Obtiene el estado del checkbox de Administrador
+            var isChecked = $(this).prop('checked');
+
+            // Deshabilita o habilita los demás checkboxes según el estado del checkbox de Administrador
+            $('#seleccion, #insercion, #actualizacion, #eliminacion').prop('disabled', isChecked);
+        });
     </script>
 </body>
 
