@@ -4,7 +4,9 @@ from pymongo import MongoClient
 import psycopg2
 from psycopg2 import extras, sql
 from bson import json_util
-app = Flask(_name_)
+from flask import Response, jsonify
+
+app = Flask(__name__)
 app.secret_key = 'david2003'
 
 db = None  # Inicialmente, la base de datos MongoDB está configurada como None
@@ -109,16 +111,17 @@ def consultar_mysql():
                 conn = mysql.connector.connect(
                     host=servidor,
                     user=usuario,
-                    password=contraseña,
+                    password=contraseña
                 )
 
                 cursor = conn.cursor()
 
                 # Ejecutar la consulta SQL
                 cursor.execute(consulta_sql)
+                
 
                 # Si la consulta es un SELECT, obtener resultados
-                if consulta_sql.strip().upper().startswith('SELECT'):
+                if consulta_sql.strip().upper().startswith('SELECT') or consulta_sql.strip().upper().startswith('SHOW') :
                     resultados = cursor.fetchall()
                     cursor.close()
                     conn.close()
@@ -131,7 +134,49 @@ def consultar_mysql():
                     return jsonify({'mensaje': 'Operación de inserción exitosa'})
 
             except mysql.connector.Error as err:
+                print(err)
                 return jsonify({'error': f"Error al ejecutar la consulta SQL: {err}"}), 500
+        else:
+            return jsonify({'error': 'No se encontró información de conexión en la sesión'}), 500
+
+@app.route('/crear_trigger_mysql', methods=['POST'])
+def crear_trigger_mysql():
+    if request.method == 'POST':
+        # Recuperar la información de conexión desde la sesión
+        info_conexion = session.get('conexion_mysql', None)
+
+        # Verificar si la información de conexión está disponible
+        if info_conexion:
+            servidor = info_conexion['servidor']
+            usuario = info_conexion['usuario']
+            contraseña = info_conexion['contraseña']
+            nombre_base = request.form['base']
+            definicion_trigger = request.form['consulta_sql']
+
+            try:
+                conn = mysql.connector.connect(
+                    host=servidor,
+                    user=usuario,
+                    password=contraseña,
+                    database=nombre_base
+                )
+
+                cursor = conn.cursor()
+
+                # Crear el trigger
+                cursor.execute(definicion_trigger)
+
+                # Realizar commit para aplicar los cambios
+                conn.commit()
+
+                cursor.close()
+                conn.close()
+
+                return jsonify({'mensaje': 'Trigger creado exitosamente'})
+
+            except mysql.connector.Error as err:
+                print(err)
+                return jsonify({'error': f"Error al crear el trigger en MySQL: {err}"}), 500
         else:
             return jsonify({'error': 'No se encontró información de conexión en la sesión'}), 500
 
@@ -291,18 +336,19 @@ def consultar_postgres():
                 # Ejecutar la consulta SQL
                 cursor.execute(consulta_sql)
 
+                # Realizar commit después de cada consulta
+                conn.commit()
+
                 # Si la consulta es un SELECT, obtener resultados
-                if consulta_sql.strip().startswith('SELECT') or consulta_sql.strip.startswith('select'):
+                if consulta_sql.strip().upper().startswith('SELECT'):
                     resultados = cursor.fetchall()
                     cursor.close()
                     conn.close()
                     return jsonify(resultados)
                 else:
-                    # Para consultas que no son SELECT (como INSERT), realizar commit
-                    conn.commit()
                     cursor.close()
                     conn.close()
-                    return jsonify({'mensaje': 'Operación de inserción/actualización/extracción exitosa'})
+                    return jsonify({'mensaje': 'Operación exitosa'})
 
             except Exception as e:
                 print(e)
@@ -310,5 +356,65 @@ def consultar_postgres():
         else:
             return jsonify({'error': 'No se encontró información de conexión en la sesión'}), 500
 
-if _name_ == "_main_":
+@app.route('/obtener_datos_sesion_actual', methods=['GET'])
+def obtener_datos_sesion_actual_desde_flask():
+    # Obtener los datos de conexión desde la sesión
+    info_conexion = session.get('conexion_mysql', None)
+
+    # Verificar si la información de conexión está disponible
+    if info_conexion:
+        datos_sesion = {
+            'servidor': info_conexion['servidor'],
+            'usuario': info_conexion['usuario'],
+            'contrasena': info_conexion['contraseña']
+        }
+        return datos_sesion
+    else:
+        return {'error': 'No se encontró información de conexión en la sesión'}
+
+@app.route('/crearUsuarioPostgres', methods=['POST'])
+def crearUsuarioPostgres():
+    if request.method == 'POST':
+        # Recuperar la información de conexión desde la sesión
+        info_conexion = session.get('conexion_postgres', None)
+
+        # Verificar si la información de conexión está disponible
+        if info_conexion:
+            servidor = info_conexion['servidor']
+            usuario = info_conexion['usuario']
+            contraseña = info_conexion['contraseña']
+            consulta_sql = request.form['consulta_sql']
+
+            try:
+                conn = psycopg2.connect(
+                    host=servidor,
+                    user=usuario,
+                    password=contraseña
+                )
+
+                cursor = conn.cursor()
+
+                # Ejecutar la consulta SQL
+                cursor.execute(consulta_sql)
+
+                # Realizar commit para aplicar los cambios
+                conn.commit()
+
+                cursor.close()
+                conn.close()
+
+                # Devolver una respuesta JSON directamente
+                return jsonify({'mensaje': 'Operación de inserción/actualización/extracción exitosa'})
+
+            except Exception as e:
+                print(e)
+                # Devolver una respuesta JSON directamente
+                return jsonify({'error': f"Error al ejecutar la consulta SQL: {e}"}), 500
+        else:
+            # Devolver una respuesta JSON directamente
+            return jsonify({'error': 'No se encontró información de conexión en la sesión'}), 500
+
+
+
+if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
